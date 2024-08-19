@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
+import 'package:turisty/home.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: IntroScreenDefault(), // Certifique-se de que seu Scaffold está dentro de MaterialApp
+      home: IntroScreenDefault(), 
     );
   }
 }
@@ -108,10 +109,9 @@ class _IntroScreenDefaultState extends State<IntroScreenDefault> {
 
   void onDonePress() {
     log("End of slides");
-    // Navegar para a próxima tela ou realizar outra ação
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => NextScreen()), // Substitua pela tela seguinte
+      MaterialPageRoute(builder: (context) => HomeScreen()),
     );
   }
 
@@ -123,42 +123,27 @@ class _IntroScreenDefaultState extends State<IntroScreenDefault> {
         listContentConfig: listContentConfig,
         onDonePress: onDonePress,
           skipButtonStyle: TextButton.styleFrom(
-            backgroundColor: Color(0xffE57A44),   // Cor de fundo do botão Skip
-            foregroundColor: Colors.white,         // Cor do texto
+            backgroundColor: Color(0xffE57A44),  
+            foregroundColor: Colors.white,         
           ),
           prevButtonStyle: TextButton.styleFrom(
-            backgroundColor: Color(0xffE57A44), // Cor de fundo do botão Prev
-            foregroundColor: Colors.white,          // Cor do texto
+            backgroundColor: Color(0xffE57A44),
+            foregroundColor: Colors.white,          
           ),
           nextButtonStyle: TextButton.styleFrom(
-            backgroundColor: Color(0xffE57A44),  // Cor de fundo do botão Next
-            foregroundColor: Colors.white,          // Cor do texto
+            backgroundColor: Color(0xffE57A44), 
+            foregroundColor: Colors.white,          
           ),
           doneButtonStyle: TextButton.styleFrom(
-            backgroundColor: Color(0xffE57A44),   // Cor de fundo do botão Done
-            foregroundColor: Colors.white,          // Cor do texto
+            backgroundColor: Color(0xffE57A44),  
+            foregroundColor: Colors.white,          
           ),
           onSkipPress: () {
-          // Ação ao pressionar "Pular"
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => NextScreen()), // Substitua pela tela seguinte
+            MaterialPageRoute(builder: (context) => HomeScreen()),
           );
         },
-      ),
-    );
-  }
-}
-
-class NextScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Next Screen"),
-      ),
-      body: Center(
-        child: Text("Bem-vindo à próxima tela!"),
       ),
     );
   }
