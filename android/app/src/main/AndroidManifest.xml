@@ -3,6 +3,11 @@
         android:label="turisty"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBp66hS_jOXEkjD1K0_AufxlNdoMslEDYc" /> <!-- Gerar a chave da api do google maps -->
+            
         <activity
             android:name=".MainActivity"
             android:exported="true"

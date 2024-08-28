@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:turisty/details.dart';
 
 void main() {
   runApp(MyApp());
@@ -156,6 +157,15 @@ class DestinationCard extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LugarDetalhesScreen()),
+                );
+              },
+              child: const Text("Ver"),
             ),
           ],
         ),
