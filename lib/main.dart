@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:turisty/home.dart';
+import 'package:turisty/register.dart';
 
 void main() {
   runApp(MyApp());
@@ -78,16 +79,8 @@ class _IntroScreenDefaultState extends State<IntroScreenDefault> {
       ),
     );
     listContentConfig.add(
-      const ContentConfig(
-        title: "CRIE UMA NOVA CONTA",
-        styleTitle: TextStyle(
-          color: Color(0xffE57A44),
-          fontWeight: FontWeight.w900,
-          fontSize: 30
-        ),
-        description:
-            "Antes de finalizarmos, por favor, informe seu nome...",
-        pathImage: "lib/assets/images/Client Management.png",
+      ContentConfig(
+        centerWidget: SignupScreen(),
         backgroundColor: Color(0xff38726C),
       ),
     );
