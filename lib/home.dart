@@ -14,16 +14,53 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<DestinationCard> destinations = [
+    DestinationCard(
+      imagePath: 'lib/assets/images/cachoeira-ferro-doido.png',
+      title: 'Cachoeira do Ferro Doido',
+      distance: '107km do seu local',
+      description:
+          'A Cachoeira do Ferro Doido é uma das paisagens mais estonteantes da Chapada Diamantina.',
+      onSave: () {},
+      onRemove: () {},
+    ),
+    DestinationCard(
+      imagePath: 'lib/assets/images/images.jpeg',
+      title: 'Cachoeira da Boca D´Água',
+      distance: '30km do seu local',
+      description: 'Visite a bela cachoeira da Boca D´Água próxima a Uibaí!',
+      onSave: () {},
+      onRemove: () {},
+    ),
+  ];
+
+  List<DestinationCard> savedDestinations = [];
+
+  void saveDestination(DestinationCard destination) {
+    setState(() {
+      savedDestinations.add(destination);
+      destinations.remove(destination);
+    });
+  }
+
+  void removeSavedDestination(DestinationCard destination) {
+    setState(() {
+      destinations.add(destination);
+      savedDestinations.remove(destination);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
-        ),
         title: Text("Home"),
         actions: [
           IconButton(
@@ -53,27 +90,16 @@ class HomeScreen extends StatelessWidget {
             ),
             Expanded(
               child: ListView(
-                children: [
-                  DestinationCard(
-                    imagePath: 'lib/assets/images/cachoeira-ferro-doido.png',
-                    title: 'Cachoeira do Ferro Doido',
-                    distance: '107km do seu local',
-                    description:
-                        'A Cachoeira do Ferro Doido é uma das paisagens mais estonteantes da Chapada Diamantina.',
-                  ),
-                  DestinationCard(
-                    imagePath: 'lib/assets/images/cachoeira-ferro-doido.png', 
-                    title: 'Cachoeira do Ferro Doido',
-                    distance: '16km do seu local',
-                    description: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-                  ),
-                  DestinationCard(
-                    imagePath: 'lib/assets/images/cachoeira-ferro-doido.png',
-                    title: 'Cachoeira do Ferro Doido',
-                    distance: '16km do seu local',
-                    description: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-                  ),
-                ],
+                children: destinations.map((destination) {
+                  return DestinationCard(
+                    imagePath: destination.imagePath,
+                    title: destination.title,
+                    distance: destination.distance,
+                    description: destination.description,
+                    onSave: () => saveDestination(destination),
+                    onRemove: () => {},
+                  );
+                }).toList(),
               ),
             ),
           ],
@@ -90,6 +116,19 @@ class HomeScreen extends StatelessWidget {
             label: 'Saved',
           ),
         ],
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SavedScreen(
+                  savedDestinations: savedDestinations,
+                  onRemove: removeSavedDestination, // Passando a função aqui
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -100,12 +139,16 @@ class DestinationCard extends StatelessWidget {
   final String title;
   final String distance;
   final String description;
+  final VoidCallback onSave;
+  final VoidCallback onRemove;
 
   DestinationCard({
     required this.imagePath,
     required this.title,
     required this.distance,
     required this.description,
+    required this.onSave,
+    required this.onRemove,
   });
 
   @override
@@ -158,16 +201,59 @@ class DestinationCard extends StatelessWidget {
                 ],
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LugarDetalhesScreen()),
-                );
-              },
-              child: const Text("Ver"),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LugarDetalhesScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text("Ver"),
+                ),
+                IconButton(
+                  icon: Icon(Icons.bookmark_add),
+                  onPressed: onSave,
+                ),
+              ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class SavedScreen extends StatelessWidget {
+  final List<DestinationCard> savedDestinations;
+  final Function(DestinationCard) onRemove;
+
+  SavedScreen({required this.savedDestinations, required this.onRemove});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        title: Text("Salvos"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: savedDestinations.map((destination) {
+            return DestinationCard(
+              imagePath: destination.imagePath,
+              title: destination.title,
+              distance: destination.distance,
+              description: destination.description,
+              onSave: () {}, // Não precisa salvar novamente
+              onRemove: () => onRemove(destination), // Chamando a função de remoção
+            );
+          }).toList(),
         ),
       ),
     );
